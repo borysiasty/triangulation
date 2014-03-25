@@ -1,27 +1,27 @@
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------------
-# 
+#
 # Triangulation
-# Copyright (C) 2010-2011 Borys Jurgiel for Faunalia and University of Evora
+# Copyright (C) 2010-2014 Borys Jurgiel for Faunalia and University of Evora
 #
 #----------------------------------------------------------------------------
-# 
+#
 # licensed under the terms of GNU GPL 2
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-# 
+#
 #----------------------------------------------------------------------------
 
 from PyQt4.QtCore import *
@@ -54,37 +54,37 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     self.cmbYField.hide()
     self.label.hide()
     self.label_9.hide()
-    QObject.connect(self.ckbAddPointsToCanvas, SIGNAL("toggled ( bool )"), self.outputModeChanged)
-    QObject.connect(self.ckbSavePoints, SIGNAL("toggled ( bool )"), self.outputModeChanged)
-    QObject.connect(self.ckbAddPolygonsToCanvas, SIGNAL("toggled ( bool )"), self.outputModeChanged)
-    QObject.connect(self.ckbSavePolygons, SIGNAL("toggled ( bool )"), self.outputModeChanged)
-    QObject.connect(self.cmbInLayer, SIGNAL("currentIndexChanged ( int )"), self.inputLayerChanged)
-    QObject.connect(self.butAbout, SIGNAL("released ()"), self.about)
-    QObject.connect(self.butPointFileName, SIGNAL("released ()"), self.setPointFileName)
-    QObject.connect(self.butPolygonFileName, SIGNAL("released ()"), self.setPolygonFileName)
-   
+    self.ckbAddPointsToCanvas.toggled.connect(self.outputModeChanged)
+    self.ckbSavePoints.toggled.connect(self.outputModeChanged)
+    self.ckbAddPolygonsToCanvas.toggled.connect(self.outputModeChanged)
+    self.ckbSavePolygons.toggled.connect(self.outputModeChanged)
+    self.cmbInLayer.currentIndexChanged.connect(self.inputLayerChanged)
+    self.butAbout.released.connect(self.about)
+    self.butPointFileName.released.connect(self.setPointFileName)
+    self.butPolygonFileName.released.connect(self.setPolygonFileName)
+
     # restore last settings
     settings = QSettings()
-    self.lastFixIdField = settings.value('/AniMove/triangulation/fixIdField', QVariant('id')).toString()
-    self.lastBearingField = settings.value('/AniMove/triangulation/bearingField', QVariant('bearing')).toString()
-    self.lastDateTimeField = settings.value('/AniMove/triangulation/datetimeField', QVariant('datetime')).toString()
-    self.lastOutputPointDir = settings.value('/AniMove/triangulation/outputPointDir', QVariant('.')).toString()
-    self.lastOutputPolygonDir = settings.value('/AniMove/triangulation/outputPolygonDir', QVariant('.')).toString()
-    self.lastXField = settings.value('/AniMove/triangulation/xField', QVariant('x')).toString()
-    self.lastYField = settings.value('/AniMove/triangulation/yField', QVariant('y')).toString()
-    self.ckbDiscardDivergent.setChecked( settings.value('/AniMove/triangulation/discardDivergent', QVariant(False)).toBool() )
-    self.ckbDiscardTooBigAreas.setChecked( settings.value('/AniMove/triangulation/discardTooBigAreas', QVariant(False)).toBool() )
-    self.sbAreaThreshold.setValue( settings.value('/AniMove/triangulation/areaThreshold', QVariant(10000)).toInt()[0] )    
-    self.ckbShowSummary.setChecked( settings.value('/AniMove/triangulation/showSummary', QVariant(False)).toBool() )
-    self.ckbShowLines.setChecked( settings.value('/AniMove/triangulation/showLines', QVariant(False)).toBool() )
-    self.ckbAddPointsToCanvas.setChecked( settings.value('/AniMove/triangulation/addPointsToCanvas', QVariant(True)).toBool() )
-    self.ckbSavePoints.setChecked( settings.value('/AniMove/triangulation/savePoints', QVariant(False)).toBool() )
-    self.ckbAddPolygonsToCanvas.setChecked( settings.value('/AniMove/triangulation/AddPolygonsToCanvas', QVariant(True)).toBool() )
-    self.ckbSavePolygons.setChecked( settings.value('/AniMove/triangulation/savePolygons', QVariant(False)).toBool() )
-    self.outputPointDir = settings.value('/AniMove/triangulation/outputPointDir', QVariant('.')).toString()
-    self.outputPolygonDir = settings.value('/AniMove/triangulation/outputPolygonDir', QVariant('.')).toString()
-    self.outputEncoding = settings.value('/AniMove/triangulation/outputEncoding', QVariant('UTF-8')).toString()
-    self.outputFilter = settings.value('/AniMove/triangulation/outputFilter', QVariant('[OGR] Geography Markup Language (*.gml *.GML)')).toString()
+    self.lastFixIdField = settings.value('/AniMove/triangulation/fixIdField', 'id', type=unicode)
+    self.lastBearingField = settings.value('/AniMove/triangulation/bearingField', 'bearing', type=unicode)
+    self.lastDateTimeField = settings.value('/AniMove/triangulation/datetimeField', 'datetime', type=unicode)
+    self.lastOutputPointDir = settings.value('/AniMove/triangulation/outputPointDir', '.', type=unicode)
+    self.lastOutputPolygonDir = settings.value('/AniMove/triangulation/outputPolygonDir', '.', type=unicode)
+    self.lastXField = settings.value('/AniMove/triangulation/xField', 'x', type=unicode)
+    self.lastYField = settings.value('/AniMove/triangulation/yField', 'y', type=unicode)
+    self.ckbDiscardDivergent.setChecked( settings.value('/AniMove/triangulation/discardDivergent', False, type=bool) )
+    self.ckbDiscardTooBigAreas.setChecked( settings.value('/AniMove/triangulation/discardTooBigAreas', False, type=bool) )
+    self.sbAreaThreshold.setValue( settings.value('/AniMove/triangulation/areaThreshold', type=int) )
+    self.ckbShowSummary.setChecked( settings.value('/AniMove/triangulation/showSummary', False, type=bool) )
+    self.ckbShowLines.setChecked( settings.value('/AniMove/triangulation/showLines', False, type=bool) )
+    self.ckbAddPointsToCanvas.setChecked( settings.value('/AniMove/triangulation/addPointsToCanvas', True, type=bool) )
+    self.ckbSavePoints.setChecked( settings.value('/AniMove/triangulation/savePoints', False, type=bool) )
+    self.ckbAddPolygonsToCanvas.setChecked( settings.value('/AniMove/triangulation/AddPolygonsToCanvas', True, type=bool) )
+    self.ckbSavePolygons.setChecked( settings.value('/AniMove/triangulation/savePolygons', False, type=bool) )
+    self.outputPointDir = settings.value('/AniMove/triangulation/outputPointDir', '.', type=unicode)
+    self.outputPolygonDir = settings.value('/AniMove/triangulation/outputPolygonDir', '.', type=unicode)
+    self.outputEncoding = settings.value('/AniMove/triangulation/outputEncoding', 'UTF-8', type=unicode)
+    self.outputFilter = settings.value('/AniMove/triangulation/outputFilter', '[OGR] Geography Markup Language (*.gml *.GML)', type=unicode)
 
     # fill the input layer combobox and set to current layer if valid
     self.layers=[]
@@ -118,50 +118,50 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
       return
     if self.ckbSavePolygons.isChecked() and not self.driverName(self.linePolygonFileName.text()):
       return
-      
+
     if self.iface.mapCanvas().hasCrsTransformEnabled():
       # get crs from the projct
-      self.crs = self.iface.mapCanvas().mapRenderer().destinationSrs()
-      if self.crs.mapUnits() == 1: 
+      self.crs = self.iface.mapCanvas().mapRenderer().destinationCrs()
+      if self.crs.mapUnits() == 1:
         # feets
         QMessageBox.warning(self,'AniMove Triangulation','Current project distance units are feet, while the Triangulation plugins works with meters only. Please choose a metric coordinate reference system.')
         return
-      if self.crs.mapUnits() > 1: 
+      if self.crs.mapUnits() > 1:
         # degrees
         QMessageBox.warning(self,'AniMove Triangulation','Current project works with geographic coordinate reference system. Please switch to a projected CRS.')
         return
     else:
       # get crs from the source layer
       self.crs = self.layer.crs()
-      if self.crs.mapUnits() == 1: 
+      if self.crs.mapUnits() == 1:
         # feets
         QMessageBox.warning(self,'AniMove Triangulation','The source layer units are feet, while the Triangulation plugins works with meters only. Please enable On-The-Fly Reprojection and switch to any metric system.')
         return
-      if self.crs.mapUnits() > 1: 
+      if self.crs.mapUnits() > 1:
         # degrees
         QMessageBox.warning(self,'AniMove Triangulation','The source layer units are reported as degrees. If they are meters, please adjust the layer CRS declaration. If the layer really uses unprojected CRS, please enable On-The-Fly Reprojection and switch to a projected CRS.')
         return
-      
+
     # save QSettings
     settings = QSettings()
-    settings.setValue('/AniMove/triangulation/fixIdField', QVariant(self.cmbFixIdField.currentText()))
-    settings.setValue('/AniMove/triangulation/bearingField', QVariant(self.cmbBearingField.currentText()))
-    settings.setValue('/AniMove/triangulation/datetimeField', QVariant(self.cmbDateTimeField.currentText()))
-    settings.setValue('/AniMove/triangulation/xField', QVariant(self.cmbXField.currentText()))
-    settings.setValue('/AniMove/triangulation/yField', QVariant(self.cmbYField.currentText()))
-    settings.setValue('/AniMove/triangulation/discardDivergent', QVariant(self.ckbDiscardDivergent.isChecked()))
-    settings.setValue('/AniMove/triangulation/discardTooBigAreas', QVariant(self.ckbDiscardTooBigAreas.isChecked()))
-    settings.setValue('/AniMove/triangulation/areaThreshold', QVariant(self.sbAreaThreshold.value()))
-    settings.setValue('/AniMove/triangulation/showSummary', QVariant(self.ckbShowSummary.isChecked()))
-    settings.setValue('/AniMove/triangulation/showLines', QVariant(self.ckbShowLines.isChecked()))
-    settings.setValue('/AniMove/triangulation/addPointsToCanvas', QVariant(self.ckbAddPointsToCanvas.isChecked()))
-    settings.setValue('/AniMove/triangulation/savePoints', QVariant(self.ckbSavePoints.isChecked()))
-    settings.setValue('/AniMove/triangulation/AddPolygonsToCanvas', QVariant(self.ckbAddPolygonsToCanvas.isChecked()))
-    settings.setValue('/AniMove/triangulation/savePolygons', QVariant(self.ckbSavePolygons.isChecked()))
-    settings.setValue('/AniMove/triangulation/outputPointDir', QVariant(self.outputPointDir))
-    settings.setValue('/AniMove/triangulation/outputPolygonDir', QVariant(self.outputPolygonDir))
-    settings.setValue('/AniMove/triangulation/outputEncoding', QVariant(self.outputEncoding))
-    settings.setValue('/AniMove/triangulation/outputFilter', QVariant(self.outputFilter))
+    settings.setValue('/AniMove/triangulation/fixIdField', self.cmbFixIdField.currentText())
+    settings.setValue('/AniMove/triangulation/bearingField', self.cmbBearingField.currentText())
+    settings.setValue('/AniMove/triangulation/datetimeField', self.cmbDateTimeField.currentText())
+    settings.setValue('/AniMove/triangulation/xField', self.cmbXField.currentText())
+    settings.setValue('/AniMove/triangulation/yField', self.cmbYField.currentText())
+    settings.setValue('/AniMove/triangulation/discardDivergent', self.ckbDiscardDivergent.isChecked())
+    settings.setValue('/AniMove/triangulation/discardTooBigAreas', self.ckbDiscardTooBigAreas.isChecked())
+    settings.setValue('/AniMove/triangulation/areaThreshold', self.sbAreaThreshold.value())
+    settings.setValue('/AniMove/triangulation/showSummary', self.ckbShowSummary.isChecked())
+    settings.setValue('/AniMove/triangulation/showLines', self.ckbShowLines.isChecked())
+    settings.setValue('/AniMove/triangulation/addPointsToCanvas', self.ckbAddPointsToCanvas.isChecked())
+    settings.setValue('/AniMove/triangulation/savePoints', self.ckbSavePoints.isChecked())
+    settings.setValue('/AniMove/triangulation/AddPolygonsToCanvas', self.ckbAddPolygonsToCanvas.isChecked())
+    settings.setValue('/AniMove/triangulation/savePolygons', self.ckbSavePolygons.isChecked())
+    settings.setValue('/AniMove/triangulation/outputPointDir', self.outputPointDir)
+    settings.setValue('/AniMove/triangulation/outputPolygonDir', self.outputPolygonDir)
+    settings.setValue('/AniMove/triangulation/outputEncoding', self.outputEncoding)
+    settings.setValue('/AniMove/triangulation/outputFilter', self.outputFilter)
     # set field indexes
     self.fieldIndexes = {'id': self.nfields[self.cmbFixIdField.currentIndex()],
       'bearing': self.nfields[self.cmbBearingField.currentIndex()],
@@ -175,7 +175,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     self.doProcess()
     # close the dialog
     QDialog.accept(self)
-    
+
     if self.ckbShowSummary.isChecked():
       summary = "<b>Input:</b><br/>"
       summary+= "<b>%d</b> unique subsets (fix identifiers)<br/>" % stats['total subsets']
@@ -208,20 +208,21 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     self.cmbDateTimeField.clear()
     self.cmbXField.clear()
     self.cmbYField.clear()
-    allFields = self.layer.dataProvider().fields()
     # take attributes of first feature (for testing strings)
-    provider = self.layer.dataProvider()
-    provider.select( provider.attributeIndexes() )
     feat = QgsFeature()
-    provider.nextFeature(feat)
-    attrs = feat.attributeMap()
+    result = self.layer.getFeatures().nextFeature(feat)
+    if not result:
+        # make the feat empty
+        feat = QgsFeature()
+    allFields = feat.fields().toList()
+    attrs = feat.attributes()
     # collect numerical and data fields separately. self.nfields = dict(combobox item : source index)
     self.nfields={}
     self.dfields={}
-    for i in allFields:
+    for i in range(len(allFields)):
       if allFields[i].type()<10:
         self.nfields[len(self.nfields)] = i
-      elif attrs.has_key(i) and parseDateTime( attrs[i].toString() ):
+      elif parseDateTime( attrs[i] ):
         self.dfields[len(self.dfields)] = i
     # fill the field comboboxes and set to last/default values if possible
     for i in self.nfields.values():
@@ -232,20 +233,20 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     for i in self.dfields.values():
         self.cmbDateTimeField.addItem(allFields[i].name())
     for i in self.nfields:
-      if not QString.compare( allFields[self.nfields[i]].name(), self.lastFixIdField, Qt.CaseInsensitive): self.cmbFixIdField.setCurrentIndex(i)
-      if not QString.compare( allFields[self.nfields[i]].name(), self.lastBearingField, Qt.CaseInsensitive): self.cmbBearingField.setCurrentIndex(i)
-      if not QString.compare( allFields[self.nfields[i]].name(), self.lastXField, Qt.CaseInsensitive): self.cmbXField.setCurrentIndex(i)
-      if not QString.compare( allFields[self.nfields[i]].name(), self.lastYField, Qt.CaseInsensitive): self.cmbYField.setCurrentIndex(i)
+      if allFields[self.nfields[i]].name().upper() == self.lastFixIdField.upper(): self.cmbFixIdField.setCurrentIndex(i)
+      if allFields[self.nfields[i]].name().upper() == self.lastBearingField.upper(): self.cmbBearingField.setCurrentIndex(i)
+      if allFields[self.nfields[i]].name().upper() == self.lastXField.upper(): self.cmbXField.setCurrentIndex(i)
+      if allFields[self.nfields[i]].name().upper() == self.lastYField.upper(): self.cmbYField.setCurrentIndex(i)
     for i in self.dfields:
-      if not QString.compare( allFields[self.dfields[i]].name(), self.lastDateTimeField, Qt.CaseInsensitive): self.cmbDateTimeField.setCurrentIndex(i)
+      if allFields[self.dfields[i]].name().upper() == self.lastDateTimeField.upper(): self.cmbDateTimeField.setCurrentIndex(i)
     # fill the output layer names
-    ext = self.outputFilter.section('*',1,1).section(' ',0,0)
+    ext = self.outputFilter.split('*')[1].split(' ')[0]
     self.linePointLayerName.setText(self.layer.name() + '_locations')
     self.linePolygonLayerName.setText(self.layer.name() + '_polygons')
     self.linePointFileName.setText(self.layer.name() + '_locations' + ext)
     self.linePolygonFileName.setText(self.layer.name() + '_polygons'+ ext)
-   
-    
+
+
   def outputModeChanged(self, *args):
     if self.ckbSavePoints.isChecked():
       self.linePointLayerName.setEnabled(False)
@@ -271,7 +272,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
       self.linePolygonLayerName.setEnabled(False)
       self.linePolygonFileName.setEnabled(False)
       self.butPolygonFileName.setEnabled(False)
-      
+
 
   def setPointFileName(self):
     self.setFileName('POINTS')
@@ -287,30 +288,30 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     filters = ''
     for i in formats:
       filters += i + ';;'
-    if mode == 'POLYGONS': 
+    if mode == 'POLYGONS':
       title = 'Save polygons as'
       outputDir = self.outputPolygonDir
     else:
       title = 'Save points as'
-      outputDir = self.outputPointDir  
+      outputDir = self.outputPointDir
     fileDialog = QgsEncodingFileDialog(self, title, outputDir, filters, self.outputEncoding)
     fileDialog.setAcceptMode(QFileDialog.AcceptSave)
     if self.outputFilter:
       fileDialog.selectNameFilter( self.outputFilter )
     if fileDialog.exec_() != QDialog.Accepted:
       return
-    fileName = unicode(fileDialog.selectedFiles().first())
+    fileName = fileDialog.selectedFiles()[0]
     if not fileName:
       return
     filePath = QFileInfo(fileName).absoluteFilePath()
-    if filePath.isEmpty():
+    if not filePath:
       return
     self.outputEncoding = str(fileDialog.encoding())
     self.outputFilter = fileDialog.selectedNameFilter()
     driverName = QgsVectorFileWriter.supportedFiltersAndFormats()[ self.outputFilter ]
-    if driverName == 'ESRI Shapefile' and QFileInfo(filePath).suffix().toUpper() != 'SHP':
+    if driverName == 'ESRI Shapefile' and QFileInfo(filePath).suffix().upper() != 'SHP':
       filePath = filePath + '.shp'
-    if driverName == 'KML' and QFileInfo(filePath).suffix().toUpper() != 'KML':
+    if driverName == 'KML' and QFileInfo(filePath).suffix().upper() != 'KML':
       filePath = filePath + '.kml'
     if mode == 'POLYGONS':
       self.outputPolygonDir = QFileInfo(fileName).absolutePath()
@@ -319,7 +320,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
       self.outputPointDir = QFileInfo(fileName).absolutePath()
       self.linePointFileName.setText(filePath)
 
-    
+
   def driverName(self, filePath):
     outputFormats={ 'BNA': '[OGR] Atlas BNA (*.bna *.BNA)',
                     'DXF': '[OGR] AutoCAD DXF (*.dxf *.DXF)',
@@ -337,26 +338,51 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
                     'TAB': '[OGR] Mapinfo File (*.mif *.tab *.MIF *.TAB)',
                     'DGN': '[OGR] Microstation DGN (*.dgn *.DGN)',
                     'SQLITE': '[OGR] SQLite (*.sqlite *.SQLITE)'}
-    if not filePath.contains('.'):
+    # seems newer GDAL of QGIS verisons use another names, so we need an alternate dictionary
+    alternateFormats={  'BNA': 'Atlas BNA [OGR] (*.bna *.BNA)',
+                        'DXF': 'AutoCAD DXF [OGR] (*.dxf *.DXF)',
+                        'CSV': 'Comma Separated Value [CSV] [OGR] (*.csv *.CSV)',
+                        'SHP': 'ESRI Shapefile [OGR] (*.shp *.SHP)',
+                        'GPX': 'Format GPS eXchange [GPX] [OGR] (*.gpx *.GPX)',
+                        'GMT': 'Generic Mapping Tools [GMT] [OGR] (*.gmt *.GMT)',
+                        'GEOJSON': 'GeoJSON [OGR] (*.geojson *.GEOJSON)',
+                        'GXT': 'Geoconcept [OGR] (*.gxt *.txt *.GXT *.TXT)',
+                        'GML': 'Geography Markup Language [GML] [OGR] (*.gml *.GML)',
+                        'ITF': 'INTERLIS 2 [OGR] (*.itf *.xml *.ili *.ITF *.XML *.ILI)',
+                        'ILI': 'INTERLIS 2 [OGR] (*.itf *.xml *.ili *.ITF *.XML *.ILI)',
+                        'KML': 'Keyhole Markup Language [KML] [OGR] (*.kml *.KML)',
+                        'TAB': 'MapInfo TAB [OGR] (*.tab *.TAB)',
+                        'DGN': 'Microstation DGN [OGR] (*.dgn *.DGN)',
+                        'SQLITE': 'SQLite [OGR] (*.sqlite *.SQLITE)'}
+
+
+
+    if not '.' in filePath:
       QMessageBox.warning(self,'I\'m sorry', 'Please add an extension to the output file name(s)')
       return None
-    ext = unicode(filePath.section('.',-1).toUpper())
+    ext = filePath.upper().split('.')[-1]
     if not outputFormats.has_key(ext):
       QMessageBox.warning(self,'I\'m sorry', 'I can\'t recognize the <b>.%s</b> file extension. Please use one of supported formats.' % ext)
       return None
-    return QgsVectorFileWriter.supportedFiltersAndFormats()[ QString(outputFormats[ext]) ]
+    if outputFormats[ext] in QgsVectorFileWriter.supportedFiltersAndFormats():
+        return QgsVectorFileWriter.supportedFiltersAndFormats()[ outputFormats[ext] ]
+    elif alternateFormats[ext] in QgsVectorFileWriter.supportedFiltersAndFormats():
+        return QgsVectorFileWriter.supportedFiltersAndFormats()[ alternateFormats[ext] ]
+    else:
+      QMessageBox.warning(self,'I\'m sorry', 'I can\'t handle the <b>.%s</b> file format. Please try another format.' % ext)
+      return None
 
 
   def saveAs(self, layer, filePath, mode): # 'POINT' | 'POLYGON'
-    if unicode(filePath.section('.',-1).toUpper())=='SHP' and QFile(filePath).exists():
+    if filePath.upper().split('.')[-1] == 'SHP' and QFile(filePath).exists():
       try:
         QgsVectorFileWriter.deleteShapeFile(filePath)
       except:
         pass
-    errorMsg = QString()
+    errorMsg = ''
     if QgsVectorFileWriter.writeAsVectorFormat(layer, filePath, self.outputEncoding, layer.crs(), self.driverName(filePath), False, errorMsg):
       QMessageBox.warning(self,'I\'m sorry', errorMsg)
-    
+
 
   def about(self):
     from DlgAbout import DlgAbout
@@ -364,8 +390,8 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     dialog.exec_()
 
 
-  def loadStyle(self, layer, fileName):  
-    errorMsg = QString()
+  def loadStyle(self, layer, fileName):
+    errorMsg = ''
     domdoc = QDomDocument()
     qml = QFile( os.path.join(os.path.dirname(__file__), 'styles' , fileName) )
     if not qml.exists():
@@ -377,15 +403,15 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
 
 
   def doProcess(self):
-    global bearings, errors, stats, intersections, centroids 
-    
+    global bearings, errors, stats, intersections, centroids
+
     discardDivergent = self.ckbDiscardDivergent.isChecked()
     discardTooBigAreas = self.ckbDiscardTooBigAreas.isChecked()
     areaThreshold = self.sbAreaThreshold.value()
     includeDateTime = ( self.fieldIndexes['datetime'] > -1 )
-        
-    provider = self.layer.dataProvider()
-    provider.select( provider.attributeIndexes() )
+
+#    provider = self.layer.dataProvider()
+#    provider.select( provider.attributeIndexes() )
     bearings = {}               # dict( fixIx: [(x1,y1,b1,datetime), (x2,y2,b2,datetime), ...] )
     validBearings = {}          # dict( fixId: [datetime, datetime] )
     errors = {'invalid bearings':0, 'too less bearings':0, 'divergent bearings':0, 'locations discarded because of divergency':0, 'too big areas':0}
@@ -394,8 +420,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     stats = {}
 
     # populate the bearings dict
-    feat = QgsFeature()
-    while provider.nextFeature(feat):
+    for feat in self.layer.getFeatures():
       geom = feat.geometry()
       if self.iface.mapCanvas().hasCrsTransformEnabled():
         geom = QgsGeometry(geom)
@@ -403,22 +428,22 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
           QMessageBox.warning(self,'I\'m sorry', 'Very strange! Transforming a feature from the layer CRS to project CRS failed.\nPlease try disable OTFR and contact the authors!')
           return
       coor = geom.asPoint()
-      attrs = feat.attributeMap()
-      fixId = attrs[self.fieldIndexes["id"]].toInt()[0]
-      bearing = attrs[self.fieldIndexes["bearing"]].toDouble()
+      attrs = feat.attributes()
+      fixId = attrs[self.fieldIndexes["id"]]
+      bearing = attrs[self.fieldIndexes["bearing"]]
       datetime = None
       if includeDateTime:
-        datetime = parseDateTime(attrs[self.fieldIndexes['datetime']].toString())
-      if not bearing[1] or bearing[0]<0 or bearing[0]>360:
+        datetime = parseDateTime(attrs[self.fieldIndexes['datetime']])
+      if not bearing or bearing<0 or bearing>360:
         errors['invalid bearings'] += 1
       else:
-        dadd(bearings, fixId, [(coor.x(), coor.y(), bearing[0], datetime)] )
+        dadd(bearings, fixId, [(coor.x(), coor.y(), bearing, datetime)] )
     stats['total subsets'] = len(bearings)
-    stats['total bearings'] = provider.featureCount()
+    stats['total bearings'] = self.layer.featureCount()
     self.progressBar.setMaximum(len(bearings) * 5)
     self.progressBar.setEnabled(True)
     self.setEnabled(False)
-    
+
     # remove invalid subsets - only one bearing for fixId
     for i in bearings.keys():
       if len(bearings[i]) < 2:
@@ -444,13 +469,13 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
           intersections.pop(i)
         errors['locations discarded because of divergency'] += 1
       self.progressBar.setValue( self.progressBar.value()+1 )
-      
+
     # copy valid bearings only (do not remove anything - the index!)
     for i in bearings.keys():
       for j in range(len(bearings[i])):
         if intersections.has_key(i) and ( j in [c[2] for c in intersections[i]] or j in [c[3] for c in intersections[i]] ):
           dadd(validBearings, i, [bearings[i][j][3]])
-        
+
     # put lines and crossings onto a memory layer
     layerIntersections = QgsVectorLayer('Point', self.layer.name() + '_intersections', 'memory')
     layerIntersections.startEditing()
@@ -469,7 +494,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     for i in intersections.keys(): #fixId
       for j in intersections[i]:   #tuple
         feat = QgsFeature()
-        attrMap = { 0 : QVariant(i) }
+        attrs = [i]
         if includeDateTime:
           try:
             timestamps = [bearings[i][j[2]][3].toTime_t(), bearings[i][j[3]][3].toTime_t()]
@@ -480,26 +505,32 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
           except:
             mt = ''
             dt = -999
-          attrMap[1] = QVariant(dt)
-          attrMap[2] = QVariant(mt)
-        feat.setAttributeMap( attrMap )
+          attrs += [dt,mt]
+        feat.initAttributes(len(attrs))
+        feat.setAttributes(attrs)
         feat.setGeometry( QgsGeometry.fromPoint(QgsPoint(j[0],j[1])) )
         provIntersections.addFeatures([feat])
         if bearings[i][j[2]][3]:
           datetime = bearings[i][j[2]][3].toString('yyyy/MM/dd hh:mm')
         else:
           datetime = ''
-        feat.setAttributeMap( { 0 : QVariant(i), 1 : QVariant(datetime) } )
+        feat = QgsFeature()
+        attrs = [i,datetime]
+        feat.initAttributes(len(attrs))
+        feat.setAttributes(attrs)
         feat.setGeometry( QgsGeometry.fromPolyline( [QgsPoint(bearings[i][j[2]][0],bearings[i][j[2]][1]), QgsPoint(j[0],j[1])] ))
         provBearings.addFeatures([feat])
         if bearings[i][j[3]][3]:
           datetime = bearings[i][j[3]][3].toString('yyyy/MM/dd hh:mm')
         else:
           datetime = ''
-        feat.setAttributeMap( { 0 : QVariant(i), 1 : QVariant(datetime) } )
+        feat = QgsFeature()
+        attrs = [i,datetime]
+        feat.initAttributes(len(attrs))
+        feat.setAttributes(attrs)
         feat.setGeometry( QgsGeometry.fromPolyline( [QgsPoint(bearings[i][j[3]][0],bearings[i][j[3]][1]), QgsPoint(j[0],j[1])] ))
         provBearings.addFeatures([feat])
-      self.progressBar.setValue( self.progressBar.value()+1 )  
+      self.progressBar.setValue( self.progressBar.value()+1 )
     layerIntersections.updateExtents()
     layerBearings.updateExtents()
     layerIntersections.commitChanges()
@@ -532,9 +563,9 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
           errors['too big areas'] += 1
         else:
           feat.setGeometry( geom )
-          attrMap = { 0 : QVariant(i),
-                      1 : QVariant( len(intersections[i]) ),
-                      2 : QVariant( areas[i] ) }
+          attrs = [ i,
+                    len(intersections[i]),
+                    areas[i] ]
           if includeDateTime:
             try:
               timestamps = [t.toTime_t() for t in validBearings[i]]
@@ -545,11 +576,11 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
             except:
               mt = ''
               dt = -999
-            attrMap[3] = QVariant(dt)
-            attrMap[4] = QVariant(mt)
-          feat.setAttributeMap( attrMap )
+            attrs += [dt,mt]
+          feat.initAttributes(len(attrs))
+          feat.setAttributes(attrs)
           provPolygons.addFeatures([feat])
-      self.progressBar.setValue( self.progressBar.value()+1 )  
+      self.progressBar.setValue( self.progressBar.value()+1 )
     layerPolygons.updateExtents()
     layerPolygons.commitChanges()
     #copy non-zero areas to stats (currently there's no zero areas though)
@@ -558,7 +589,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
       if i>0 and (i <= areaThreshold or not discardTooBigAreas):
         stats["areas"]+=[i]
 
-    # compute centroids        
+    # compute centroids
     for i in intersections.keys():
       if len(intersections[i]) == 1:
         # one intersection found
@@ -573,8 +604,8 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
         else:
           a = 0
         centroids[i] = (x,y,n,a)
-      self.progressBar.setValue( self.progressBar.value()+1 )  
-        
+      self.progressBar.setValue( self.progressBar.value()+1 )
+
     # put centroids onto a memory layer
     layerCentroids = QgsVectorLayer('Point', self.linePointLayerName.text(), 'memory')
     layerCentroids.startEditing()
@@ -585,13 +616,13 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
                                    QgsField("area", QVariant.Double) ] )
     if includeDateTime:
       provCentroids.addAttributes( [ QgsField("time_diff", QVariant.Int),
-                                     QgsField("time_mean", QVariant.String) ] )                                   
+                                     QgsField("time_mean", QVariant.String) ] )
     for i in centroids.keys(): #fixId
       feat = QgsFeature()
       feat.setGeometry( QgsGeometry.fromPoint(QgsPoint(centroids[i][0],centroids[i][1])) )
-      attrMap = { 0 : QVariant(i),
-                  1 : QVariant( centroids[i][2] ),
-                  2 : QVariant( centroids[i][3] ) }
+      attrs = [ i,
+                centroids[i][2],
+                centroids[i][3] ]
       if includeDateTime:
         try:
           timestamps = [t.toTime_t() for t in validBearings[i]]
@@ -602,11 +633,11 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
         except:
           mt = ''
           dt = -999
-        attrMap[3] = QVariant(dt)
-        attrMap[4] = QVariant(mt)
-      feat.setAttributeMap( attrMap )
+        attrs += [dt,mt]
+      feat.initAttributes(len(attrs))
+      feat.setAttributes(attrs)
       provCentroids.addFeatures([feat])
-      self.progressBar.setValue( self.progressBar.value()+1 )  
+      self.progressBar.setValue( self.progressBar.value()+1 )
     layerCentroids.updateExtents()
     layerCentroids.commitChanges()
     self.progressBar.setEnabled(False)
@@ -647,4 +678,4 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     elif self.ckbAddPointsToCanvas.isChecked():
       self.loadStyle(layerCentroids, "locations.qml")
       QgsMapLayerRegistry.instance().addMapLayer(layerCentroids)
-      
+

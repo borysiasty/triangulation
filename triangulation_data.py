@@ -1,43 +1,43 @@
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------------
-# 
+#
 # Triangulation
 # Copyright (C) 2010-2011 Borys Jurgiel for Faunalia and University of Evora
 #
 #----------------------------------------------------------------------------
-# 
+#
 # licensed under the terms of GNU GPL 2
-# 
+#
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation; either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License along
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-# 
+#
 #----------------------------------------------------------------------------
 
-from PyQt4.QtCore import QString, QDateTime
+from PyQt4.QtCore import QDateTime
 from math import *
 #from datetime import datetime
 
 
-def dadd(dictionary,key,value): 
+def dadd(dictionary,key,value):
   """add a value to a dictionary; create key if not exists """
   if dictionary.has_key(key):
     dictionary[key] += value
   else:
     dictionary[key] = value
-    
-    
-    
+
+
+
 def bearing2rad(bearing):
   if bearing < 0 or bearing > 360:
     return None
@@ -80,71 +80,24 @@ def triang(fix1, fix2):
 
 
 
-#def OLD_parseDateTime(s):
-  ## should be (m)m/(d)d/yyyy hh:mm
-  #if not s:
-    #return None
-  #l = s.trimmed().split(' ', QString.SkipEmptyParts)
-  #if not len(l) == 2:
-    #return None
-  #date = l[0]
-  #time = l[1]
-  #sep = None
-  #if date.contains('/'): sep = '/'
-  #if date.contains('-'): sep = '-'
-  #if date.contains('.'): sep = '.'
-  #if not sep:
-    #return None
-  #date = date.split(sep, QString.SkipEmptyParts)
-  #try:
-    #dy = int(date[0])
-  #except:
-    #return None
-  #if dy>32:
-    #try:
-      #dm = int(date[1])
-      #dd = int(date[2])
-    #except:
-      #return None
-  #else:
-    #try:
-      #dm = int(date[0])
-      #dd = int(date[1])
-      #dy = int(date[2])
-    #except:
-      #return None
-  #time = time.split(':', QString.SkipEmptyParts)
-  #try:
-    #th = int(time[0])
-    #tm = int(time[1])
-  #except:
-    #return None
-  #try:
-    #ts = int(time[2])
-  #except:
-    #ts = 0
-  #return datetime(dy,dm,dd,th,tm,ts)
-
-
-
 def parseDateTime(s):
   #QDateTime.fromString('2000-01-03 02:5','yyyy-M-d h:m')
-  #allowed order: yyy-M-d or M-d-y 
-  #allowed date separator: / - . 
+  #allowed order: yyy-M-d or M-d-y
+  #allowed date separator: / - .
   #allowed main separator: T or space
   if not s:
     return None
-  s = s.trimmed()
-  if s.contains('-'): dsep = '-'
-  elif s.contains('/'): dsep = '/'
-  elif s.contains('.'): dsep = '.'
+  s = s.strip()
+  if '-' in s: dsep = '-'
+  elif '/' in s: dsep = '/'
+  elif '.' in s: dsep = '.'
   else: return None
   tsep = ':'
-  if s.contains('T'): sep = 'T'
-  elif s.contains(' '): sep = ' '
+  if 'T' in s: sep = 'T'
+  elif ' ' in s: sep = ' '
   else: return None
   try:
-    if int(s[0:4]) in range(1800,2100): 
+    if int(s[0:4]) in range(1800,2100):
       #year first
       dformat = 'yyyy%sM%sd%sh%sm' % (dsep, dsep, sep, tsep)
     else:
