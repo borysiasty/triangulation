@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/plugins/triangulation">
+        <file>icons/triangulationIcon.png</file>
+    </qresource>
+    <qresource prefix="/faunalia">
+        <file alias="logo">icons/faunalia_logo.png</file>
+    </qresource>
+    <qresource prefix="/plugins/triangulation/about">
+        <file>icons/faunalia_pt_logo.png</file>
+        <file>icons/uevora_logo.jpg</file>
+    </qresource>
+</RCC>

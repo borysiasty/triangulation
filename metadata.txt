@@ -1,0 +1,29 @@
+; the next section is mandatory
+[general]
+name=Triangulation
+description=AniMove: Triangulation of telemetry bearings
+version=0.1.5
+qgisMinimumVersion=1.5
+
+; not used yet
+category=Vector
+
+; end of mandatory metadata
+
+; start of optional metadata
+author=Borys Jurgiel for Faunalia and University of Evora
+
+changelog=
+
+; tags are in comma separated value format, spaces are allowed
+tags=ecology,triangulation,zoology
+
+homepage=http://www.faunalia.com/animove
+tracker=http://hub.qgis.org/projects/triangulation
+repository=https://trac.faunalia.it/svn/qgis_plugins/branches/triangulation
+
+; path to a icon within the plugin folder
+icon=icons/triangulationIcon.png
+
+experimental=False
+deprecated=False
