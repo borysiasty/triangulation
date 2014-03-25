@@ -74,7 +74,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     self.lastYField = settings.value('/AniMove/triangulation/yField', 'y', type=unicode)
     self.ckbDiscardDivergent.setChecked( settings.value('/AniMove/triangulation/discardDivergent', False, type=bool) )
     self.ckbDiscardTooBigAreas.setChecked( settings.value('/AniMove/triangulation/discardTooBigAreas', False, type=bool) )
-    self.sbAreaThreshold.setValue( settings.value('/AniMove/triangulation/areaThreshold', type=int) )
+    self.sbAreaThreshold.setValue( settings.value('/AniMove/triangulation/areaThreshold', 10000, type=int) )
     self.ckbShowSummary.setChecked( settings.value('/AniMove/triangulation/showSummary', False, type=bool) )
     self.ckbShowLines.setChecked( settings.value('/AniMove/triangulation/showLines', False, type=bool) )
     self.ckbAddPointsToCanvas.setChecked( settings.value('/AniMove/triangulation/addPointsToCanvas', True, type=bool) )

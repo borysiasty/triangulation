@@ -1,7 +1,7 @@
 [general]
 name=Triangulation
 description=AniMove: Triangulation of telemetry bearings
-version=0.2
+version=0.2.1
 qgisMinimumVersion=2.0
 
 author=Borys Jurgiel for Faunalia and University of Evora
