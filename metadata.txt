@@ -8,7 +8,7 @@ author=Borys Jurgiel for Faunalia and University of Evora
 email=qgis@borysjurgiel.pl
 tags=ecology,triangulation,zoology
 
-homepage=http://www.faunalia.com/animove
+homepage=http://www.faunalia.eu/en/animove.html
 tracker=http://hub.qgis.org/projects/triangulation
 repository=http://github.com/borysiasty/triangulation
 
