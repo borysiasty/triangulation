@@ -418,6 +418,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     intersections = {}          # dict( fixIx: [(x1,y1,j1,j2), (x2,y2,j1,j2), ...] )   # j1,j2 - bearing indexes
     centroids = {}              # dict( fixIx: (x1,y1,number_of_bearings,area) )
     stats = {}
+    wrongObservations = {}      # dict of bearings
 
     # populate the bearings dict
     for feat in self.layer.getFeatures():
@@ -434,8 +435,9 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
       datetime = None
       if includeDateTime:
         datetime = parseDateTime(attrs[self.fieldIndexes['datetime']])
-      if not bearing or bearing<0 or bearing>360:
+      if not isinstance(bearing, (int, long, float)) or bearing<0 or bearing>360:
         errors['invalid bearings'] += 1
+        dadd(wrongObservations, fixId, [(coor.x(), coor.y(), bearing, datetime), 'Invalid bearing value'] )
       else:
         dadd(bearings, fixId, [(coor.x(), coor.y(), bearing, datetime)] )
     stats['total subsets'] = len(bearings)
@@ -447,6 +449,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     # remove invalid subsets - only one bearing for fixId
     for i in bearings.keys():
       if len(bearings[i]) < 2:
+        wrongObservations[i] = bearings[i] + ['Less than two bearings']
         bearings.pop(i)
         errors['too less bearings'] += 1
 
@@ -458,6 +461,7 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
           (x,y) = triang(bearings[i][j1], bearings[i][j2])
           if (x,y) == (-999,-999):
             # divergent bearings!
+            wrongObservations[i] = [bearings[i][j1], bearings[i][j2], 'Divergent bearings']
             errors['divergent bearings'] += 1
             isDivergent = True
           else:
@@ -643,6 +647,27 @@ class TriangulationDialog(QDialog, Ui_TriangulationDialog):
     self.progressBar.setEnabled(False)
     self.setEnabled(True)
 
+    # put wrong observations to memory layer
+    layerWrong = QgsVectorLayer('Point', self.layer.name() + '_errors', 'memory')
+    layerWrong.startEditing()
+    layerWrong.setCrs(self.crs)
+    provWrong = layerWrong.dataProvider()
+    provWrong.addAttributes( [ QgsField("fixId", QVariant.Int),
+                            QgsField("error", QVariant.String) ] )
+    for i in wrongObservations.keys():
+        for j in range(len(wrongObservations[i]) - 1):
+            feat = QgsFeature()
+            feat.setGeometry( QgsGeometry.fromPoint(QgsPoint(wrongObservations[i][j][0], wrongObservations[i][j][1])) )
+            attrs = [ i, wrongObservations[i][-1] ]
+            feat.initAttributes(len(attrs))
+            feat.setAttributes(attrs)
+            provWrong.addFeatures([feat])
+    layerWrong.updateExtents()
+    layerWrong.commitChanges()
+    self.setEnabled(True)
+    # Add to canvas
+    QgsMapLayerRegistry.instance().addMapLayer(layerWrong)
+    
     #save layers and/or add to mapcanvas
     if self.ckbSavePolygons.isChecked():
       filePath = self.linePolygonFileName.text()

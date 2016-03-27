@@ -58,9 +58,11 @@ def triang(fix1, fix2):
   beta1 = bearing2rad(bearing1)
   beta2 = bearing2rad(bearing2)
   # aren't the bearings parallel? (+- pi/90)
-#  if (abs(beta1 - beta2) < pi/90) or (abs(abs(beta1 - beta2) - pi) < pi/90):
-  if beta1 == beta2:
+  #  if (abs(beta1 - beta2) < pi/90) or (abs(abs(beta1 - beta2) - pi) < pi/90):
+  # do not divide by zero!
+  if abs(beta1 - beta2) < 6.6e-16 or abs(tan(beta1) - tan(beta2)) < 6.6e-16:
     return (-999,-999)
+  
   # do it now!
   x = (x1 * tan(beta1) - x2 * tan(beta2) + y2 - y1) / (tan(beta1) - tan(beta2))
   y = ((x2 - x1) * tan(beta1) * tan(beta2) - y2 * tan(beta1) + y1 * tan(beta2)) / (tan(beta2) - tan(beta1))
