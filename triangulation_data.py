@@ -89,6 +89,8 @@ def parseDateTime(s):
   #allowed main separator: T or space
   if not s:
     return None
+  if type(s) is QDateTime:
+    return s
   s = s.strip()
   if '-' in s: dsep = '-'
   elif '/' in s: dsep = '/'
