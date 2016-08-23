@@ -1,7 +1,8 @@
 [general]
 name=Triangulation
 description=AniMove: Triangulation of telemetry bearings
-version=0.2.1
+about=Calculates animal locations from telemetry bearings, with a possibility to filter out unreliable ones.
+version=0.2.2
 qgisMinimumVersion=2.0
 
 author=Borys Jurgiel for Faunalia and University of Evora
