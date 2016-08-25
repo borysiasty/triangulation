@@ -10,7 +10,7 @@ email=qgis@borysjurgiel.pl
 tags=ecology,triangulation,zoology
 
 homepage=http://www.faunalia.eu/en/animove.html
-tracker=http://hub.qgis.org/projects/triangulation
+tracker=http://github.com/borysiasty/triangulation/issues
 repository=http://github.com/borysiasty/triangulation
 
 icon=icons/triangulationIcon.png
